@@ -1,0 +1,27 @@
+{
+  "name": "stream-server-sent-events",
+  "version": "1.0.0",
+  "description": "Create a server-sent-events response stream from a http request object",
+  "main": "index.js",
+  "scripts": {
+    "test": "istanbul cover --print detail _mocha -- test -R spec"
+  },
+  "keywords": [
+    "sse",
+    "server-sent-events",
+    "event-source",
+    "event",
+    "source",
+    "server",
+    "sent",
+    "events"
+  ],
+  "author": "Florent Jaby <florent.jaby@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^3.2.0",
+    "istanbul": "^0.3.19",
+    "mocha": "^2.3.0",
+    "stream-sink": "^1.2.0"
+  }
+}
