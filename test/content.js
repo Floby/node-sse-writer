@@ -40,5 +40,51 @@ describe('a sse stream', function () {
         sse.end();
       });
     });
+
+    describe('called successively with a value and an array of 2', function () {
+      it('writes an anonymous event and a named event', function (done) {
+        sse.pipe(sink()).on('data', function(contents) {
+          expect(contents).to.equal('data: anon\r\n\r\nevent: custom name\r\ndata: event data\r\n\r\n');
+          done();
+        });
+        sse.write('anon');
+        sse.write(['custom name', 'event data']);
+        sse.end();
+      });
+    });
+
+    describe('called with an array of 3', function () {
+      it('writes named event with ID', function (done) {
+        sse.pipe(sink()).on('data', function(contents) {
+          expect(contents).to.equal('id: 8000\r\nevent: custom name\r\ndata: event data\r\n\r\n');
+          done();
+        });
+        sse.write([8000,'custom name', 'event data']);
+        sse.end();
+      });
+    });
+
+    describe('with a multiline string as value', function () {
+      it('writes a multiline anonymous event', function (done) {
+        sse.pipe(sink()).on('data', function(contents) {
+          expect(contents).to.equal('data: hello\r\ndata: world\r\ndata: this is great!\r\ndata: isn\'t it?\r\n\r\n');
+          done();
+        });
+        sse.write('hello\nworld\r\nthis is great!\risn\'t it?');
+        sse.end();
+      });
+    });
+
+    describe('with a SSE.Comment', function () {
+      it('writes a comment line', function (done) {
+        sse.pipe(sink()).on('data', function(contents) {
+          expect(contents).to.equal(': Hello!\r\ndata: event\r\n\r\n');
+          done();
+        });
+        sse.write(SSE.Comment('Hello!'));
+        sse.write('event');
+        sse.end();
+      });
+    });
   });
 });
