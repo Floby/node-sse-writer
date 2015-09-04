@@ -1,10 +1,15 @@
 {
-  "name": "stream-server-sent-events",
+  "name": "sse-writer",
   "version": "1.0.0",
-  "description": "Create a server-sent-events response stream from a http request object",
+  "description": "Creates a text/event-stream stream as specified by the WD-eventsource W3C recommendation",
   "main": "index.js",
   "scripts": {
-    "test": "istanbul cover --print detail _mocha -- test -R spec"
+    "test": "istanbul cover --print detail _mocha -- test -R spec",
+    "coveralls": "cat coverage/lcov.info | coveralls"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Floby/node-sse-writer.git"
   },
   "keywords": [
     "sse",
@@ -18,8 +23,13 @@
   ],
   "author": "Florent Jaby <florent.jaby@gmail.com>",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Floby/node-sse-writer/issues"
+  },
+  "homepage": "https://github.com/Floby/node-sse-writer",
   "devDependencies": {
     "chai": "^3.2.0",
+    "coveralls": "^2.11.4",
     "istanbul": "^0.3.19",
     "mocha": "^2.3.0",
     "stream-sink": "^1.2.0"
