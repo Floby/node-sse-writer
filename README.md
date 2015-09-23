@@ -21,6 +21,7 @@ sse.write(SSE.Comment('comment this!'))
 sse.write('Hello')
 sse.write(['add', 'Floby'])
 sse.write([8000, 'remove', 'Floby'])
+sse.end();
 ```
 
 results in the following stream
@@ -36,7 +37,16 @@ id: 8000
 event: remove
 data: Floby
 
+```
 
+You can also use the fluent interface
+
+```javascript
+sse.comment('comment this!')
+   .event('Hello')
+   .event('add', 'Floby')
+   .event(8000, 'remove', 'Floby')
+   .end()
 ```
 
 Test
