@@ -18,6 +18,14 @@ function SSE () {
     callback(null, frame);
   }
 }
+SSE.prototype.comment = function (text) {
+  this.write(SSE.Comment(text));
+  return this;
+}
+SSE.prototype.event = function (name, data) {
+  this.write([].slice.call(arguments));
+  return this;
+}
 
 SSE.Chunk = Chunk;
 
