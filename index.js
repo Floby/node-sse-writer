@@ -26,6 +26,16 @@ SSE.prototype.event = function (name, data) {
   this.write([].slice.call(arguments));
   return this;
 }
+SSE.prototype.pipe = function (dest, options) {
+  if (dest.setHeader) {
+    try {
+      dest.setHeader('Content-Type', 'text/event-stream')
+    } catch(e) {
+      // well, we tried
+    }
+  }
+  return stream.Transform.prototype.pipe.apply(this, arguments)
+}
 
 SSE.Chunk = Chunk;
 
