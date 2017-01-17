@@ -14,14 +14,16 @@ Usage
 -----
 
 ```javascript
-var SSE = require('sse-writer');
-var sse = SSE();
+var SSE = require('sse-writer')
+var sse = new SSE()
 
-sse.write(SSE.Comment('comment this!'))
-sse.write('Hello')
-sse.write(['add', 'Floby'])
-sse.write([8000, 'remove', 'Floby'])
-sse.end();
+sse.comment('comment this!')
+   .event('Hello')
+   .event('add', 'Floby')
+   .event(8000, 'remove', 'Floby')
+   .end()
+
+sse.pipe(process.stdout)
 ```
 
 results in the following stream
@@ -39,14 +41,40 @@ data: Floby
 
 ```
 
-You can also use the fluent interface
+You can also use the raw stream.Writable interface (if you're piping
+from somewhere else for example)
 
 ```javascript
-sse.comment('comment this!')
-   .event('Hello')
-   .event('add', 'Floby')
-   .event(8000, 'remove', 'Floby')
-   .end()
+var SSE = require('sse-writer');
+var sse = SSE();
+
+sse.write(SSE.Comment('comment this!'))
+sse.write('Hello')
+sse.write(['add', 'Floby'])
+sse.write([8000, 'remove', 'Floby'])
+sse.end();
+```
+
+Server example
+--------------
+
+You can use `sse-writer` in your web server as a regular
+middleware. Here with express:
+
+
+```javascript
+var app = express()
+
+app.use('/my/feed', function (req, res) {
+  var sse = new SSE()
+  sse.pipe(res)
+  sse.comment('hey!')
+     .event('add', 'Floby')
+
+  setTimeout(function () {
+    sse.event('some time later')
+  }, 10000)
+})
 ```
 
 Test
