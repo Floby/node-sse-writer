@@ -51,6 +51,42 @@ describe('a sse stream', function () {
     })
   })
 
+  describe('.event({id, name, data})', function () {
+    it('has the same effect as calling .write([id, name, data])', function(done) {
+      expected.end(['my-id', 'my-name', 'my-data']);
+      actual.event({
+        id: 'my-id',
+        name: 'my-name',
+        data: 'my-data'
+      });
+      actual.end()
+      streamEqual(expected, actual, done);
+    })
+  })
+  describe('.event({name, data})', function () {
+    it('has the same effect as calling .write([name, data])', function(done) {
+      expected.end(['my-name', 'my-data']);
+      actual.event({
+        name: 'my-name',
+        data: 'my-data'
+      });
+      actual.end()
+      streamEqual(expected, actual, done);
+    })
+  })
+  describe('.event({id, name, data})', function () {
+    it('has the same effect as calling .write([id, name, data])', function(done) {
+      expected.end(['my-id', 'my-name', 'my-data']);
+      actual.event({
+        id: 'my-id',
+        name: 'my-name',
+        data: 'my-data'
+      });
+      actual.end()
+      streamEqual(expected, actual, done);
+    })
+  })
+
 
   describe('.write([data])', function () {
     it('has the same effect as calling .write(data)', function (done) {

@@ -41,6 +41,15 @@ data: Floby
 
 ```
 
+Note that use can also provide a hash to `.event()`
+```
+sse.event({
+  id: 8000,
+  name: 'remove',
+  data: 'Floby'
+})
+```
+
 You can also use the raw stream.Writable interface (if you're piping
 from somewhere else for example)
 

@@ -22,8 +22,14 @@ SSE.prototype.comment = function (text) {
   this.write(SSE.Comment(text));
   return this;
 }
-SSE.prototype.event = function (name, data) {
-  this.write([].slice.call(arguments));
+SSE.prototype.event = function (params) {
+  var args;
+  if (typeof params === 'object') {
+    args = [params.id, params.name, params.data]
+  } else {
+    args = [].slice.call(arguments)
+  }
+  this.write(args)
   return this;
 }
 SSE.prototype.pipe = function (dest, options) {
