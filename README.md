@@ -77,6 +77,9 @@ app.use('/my/feed', function (req, res) {
 })
 ```
 
+If you pipe to a http response object which has a `setHeader(name, value)` method, it will
+call `response.setHeader('Content-Type', 'text/event-stream')` for you.
+
 Test
 ----
 
