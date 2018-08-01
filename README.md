@@ -17,7 +17,8 @@ Usage
 var SSE = require('sse-writer')
 var sse = new SSE()
 
-sse.comment('comment this!')
+sse.retry('1 hour')
+   .comment('comment this!')
    .event('Hello')
    .event('add', 'Floby')
    .event(8000, 'remove', 'Floby')
@@ -29,6 +30,8 @@ sse.pipe(process.stdout)
 results in the following stream
 
 ```
+retry: 3600000
+
 : comment this!
 data: Hello
 
