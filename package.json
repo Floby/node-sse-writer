@@ -35,5 +35,8 @@
     "sinon": "^1.17.5",
     "sinon-chai": "^2.8.0",
     "stream-sink": "^1.2.0"
+  },
+  "dependencies": {
+    "ms": "^2.1.1"
   }
 }

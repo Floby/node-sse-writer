@@ -86,5 +86,17 @@ describe('a sse stream', function () {
         sse.end();
       });
     });
+
+    describe('with a SSE.Retry', function () {
+      it('writes a retry line', function (done) {
+        sse.pipe(sink()).on('data', function(contents) {
+          expect(contents).to.equal('retry: 3600000\r\n\r\ndata: event\r\n\r\n');
+          done();
+        });
+        sse.write(SSE.Retry('1 hour'));
+        sse.write('event');
+        sse.end();
+      });
+    });
   });
 });

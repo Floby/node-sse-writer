@@ -45,6 +45,11 @@ describe('a Chunk instance', function () {
         expect(chunk.getComment()).to.equal('');
       });
     });
+    describe('.getRetry()', () => {
+      it('returns empty string', () => {
+        expect(chunk.getRetry()).to.equal('')
+      })
+    })
   });
 
   describe('instanciated from an array of 1', function () {
@@ -71,6 +76,11 @@ describe('a Chunk instance', function () {
         expect(chunk.getComment()).to.equal('');
       });
     });
+    describe('.getRetry()', () => {
+      it('returns empty string', () => {
+        expect(chunk.getRetry()).to.equal('')
+      })
+    })
   })
 
   describe('instanciated from an array of 2', function () {
@@ -97,6 +107,11 @@ describe('a Chunk instance', function () {
         expect(chunk.getComment()).to.equal('');
       });
     });
+    describe('.getRetry()', () => {
+      it('returns empty string', () => {
+        expect(chunk.getRetry()).to.equal('')
+      })
+    })
   });
   describe('instanciated from an array of 3', function () {
     beforeEach(function () {
@@ -122,6 +137,11 @@ describe('a Chunk instance', function () {
         expect(chunk.getComment()).to.equal('');
       });
     });
+    describe('.getRetry()', () => {
+      it('returns empty string', () => {
+        expect(chunk.getRetry()).to.equal('')
+      })
+    })
   });
 
   describe('instanciated with an instance of SSE.Comment', function () {
@@ -149,5 +169,42 @@ describe('a Chunk instance', function () {
         expect(chunk.getName()).to.equal('');
       });
     });
+    describe('.getRetry()', () => {
+      it('returns empty string', () => {
+        expect(chunk.getRetry()).to.equal('')
+      })
+    })
   });
+
+  describe('instanciated with an instance of SSE.Retry', () => {
+    beforeEach(() => {
+      const retry = new SSE.Retry(2000)
+      chunk = new Chunk(retry)
+    })
+    describe('.getComment()', function () {
+      it('returns empty string', function () {
+        expect(chunk.getComment()).to.equal('');
+      });
+    });
+    describe('.getMessage()', function () {
+      it('returns an empty string', function () {
+        expect(chunk.getMessage()).to.equal('');
+      });
+    })
+    describe('.getId()', function () {
+      it('returns an empty string', function () {
+        expect(chunk.getId()).to.equal('');
+      });
+    });
+    describe('.getName()', function () {
+      it('returns an empty string', function () {
+        expect(chunk.getName()).to.equal('');
+      });
+    });
+    describe('.getRetry()', () => {
+      it('returns the retry delay in ms', () => {
+        expect(chunk.getRetry()).to.equal('retry: 2000\r\n')
+      })
+    })
+  })
 });

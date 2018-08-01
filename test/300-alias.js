@@ -21,6 +21,18 @@ describe('a sse stream', function () {
       expect(actual.comment('hey')).to.equal(actual);
     })
   })
+  describe('.retry()', function () {
+    it('has the same effect as calling .write(SSE.Retry(value))', function (done) {
+      const delay = '40 minutes'
+      expected.end(SSE.Retry(delay));
+      actual.retry(delay);
+      actual.end();
+      streamEqual(expected, actual, done);
+    })
+    it('returns this', function () {
+      expect(actual.comment('hey')).to.equal(actual);
+    })
+  })
   describe('.event(data)', function () {
     it('has the same effect as calling .write(data)', function (done) {
       expected.end('hello');

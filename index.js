@@ -1,4 +1,5 @@
 var stream = require('stream');
+const ms = require('ms')
 var util = require('util');
 
 const END_OF_LINE = '\u000d\u000a'
@@ -14,12 +15,21 @@ function SSE () {
 
   this._transform = function (chunk, _, callback) {
     chunk = new Chunk(chunk);
-    var frame = chunk.getComment() + chunk.getId() + chunk.getName() + chunk.getMessage() + END_OF_LINE;
+    var frame = chunk.getComment()
+      + chunk.getRetry()
+      + chunk.getId()
+      + chunk.getName()
+      + chunk.getMessage()
+      + END_OF_LINE;
     callback(null, frame);
   }
 }
 SSE.prototype.comment = function (text) {
   this.write(SSE.Comment(text));
+  return this;
+}
+SSE.prototype.retry = function (delay) {
+  this.write(SSE.Retry(delay));
   return this;
 }
 SSE.prototype.event = function (params) {
@@ -46,9 +56,11 @@ SSE.prototype.pipe = function (dest, options) {
 SSE.Chunk = Chunk;
 
 function Chunk (stringOrArray) {
-  var message, name, id, comment;
+  var message, name, id, comment, retry;
   if (stringOrArray instanceof SSE.Comment) {
     comment = String(stringOrArray);
+  } else if (stringOrArray instanceof SSE.Retry) {
+    retry = stringOrArray.milliseconds
   } else if (Array.isArray(stringOrArray)) {
     message = String(stringOrArray.pop());
     name = String(stringOrArray.pop() || '');
@@ -67,6 +79,7 @@ function Chunk (stringOrArray) {
   this.getName = line.bind(null, 'event', name, true);
   this.getId = line.bind(null, 'id', id, true);
   this.getComment = line.bind(null, '', comment, false);
+  this.getRetry = line.bind(null, 'retry', retry, true);
 
   function line (name, prop, linefeed) {
     return prop ? name + ': ' + prop + (linefeed ? END_OF_LINE : '') : '';
@@ -79,3 +92,18 @@ function Comment (content) {
   this.toString = content.toString.bind(content);
 };
 
+
+SSE.Retry = Retry;
+function Retry (delay) {
+  if (!(this instanceof Retry)) return new SSE.Retry(delay);
+  if (typeof delay === 'number') {
+    this.milliseconds = delay
+  } else if (typeof delay === 'string') {
+    this.milliseconds = ms(delay)
+    if (!this.milliseconds) {
+      throw Error(`Wrong delay parameter: ${delay}. You should send a number or a string parsable by the module "ms"`)
+    }
+  } else {
+    throw Error(`Wrong delay parameter: ${delay}. You should send a number or a string parsable by the module "ms"`)
+  }
+}
