@@ -112,11 +112,11 @@ describe('a sse stream', function () {
 
 function streamEqual (expectedStream, actualStream, callback) {
   var count = 2, expected, actual;
-  expectedStream.pipe(sink()).on('data', function(e) {
+  expectedStream.pipe(sink()).then(function(e) {
     expected = e
     compareMaybe();
   });
-  actualStream.pipe(sink()).on('data', function(a) {
+  actualStream.pipe(sink()).then(function(a) {
     actual = a
     compareMaybe();
   });

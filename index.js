@@ -12,8 +12,11 @@ function SSE () {
   stream.Transform.call(this);
 
   this._writableState.objectMode = true;
+  this.on('finish', () => console.log('finish sse'))
+  this.on('end', () => console.log('end'))
 
   this._transform = function (chunk, _, callback) {
+    console.log('transform', chunk)
     chunk = new Chunk(chunk);
     var frame = chunk.getComment()
       + chunk.getRetry()
@@ -21,10 +24,12 @@ function SSE () {
       + chunk.getName()
       + chunk.getMessage()
       + END_OF_LINE;
+    console.log('frame', frame)
     callback(null, frame);
   }
 }
 SSE.prototype.comment = function (text) {
+  console.log('comment')
   this.write(SSE.Comment(text));
   return this;
 }
@@ -33,6 +38,7 @@ SSE.prototype.retry = function (delay) {
   return this;
 }
 SSE.prototype.event = function (params) {
+  console.log('event')
   var args;
   if (typeof params === 'object') {
     args = [params.id, params.name, params.data]
