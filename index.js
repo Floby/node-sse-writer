@@ -12,11 +12,8 @@ function SSE () {
   stream.Transform.call(this);
 
   this._writableState.objectMode = true;
-  this.on('finish', () => console.log('finish sse'))
-  this.on('end', () => console.log('end'))
 
   this._transform = function (chunk, _, callback) {
-    console.log('transform', chunk)
     chunk = new Chunk(chunk);
     var frame = chunk.getComment()
       + chunk.getRetry()
@@ -24,12 +21,10 @@ function SSE () {
       + chunk.getName()
       + chunk.getMessage()
       + END_OF_LINE;
-    console.log('frame', frame)
     callback(null, frame);
   }
 }
 SSE.prototype.comment = function (text) {
-  console.log('comment')
   this.write(SSE.Comment(text));
   return this;
 }
@@ -38,15 +33,17 @@ SSE.prototype.retry = function (delay) {
   return this;
 }
 SSE.prototype.event = function (params) {
-  console.log('event')
   var args;
-  if (typeof params === 'object') {
+  if (looksLikeEventObject(params)) {
     args = [params.id, params.name, params.data]
   } else {
     args = [].slice.call(arguments)
   }
   this.write(args)
   return this;
+}
+function looksLikeEventObject (object) {
+  return typeof object === 'object' && object.hasOwnProperty('data')
 }
 SSE.prototype.pipe = function (dest, options) {
   if (dest.setHeader) {
@@ -61,18 +58,23 @@ SSE.prototype.pipe = function (dest, options) {
 
 SSE.Chunk = Chunk;
 
-function Chunk (stringOrArray) {
+function Chunk (stringOrArrayOrObject) {
   var message, name, id, comment, retry;
-  if (stringOrArray instanceof SSE.Comment) {
-    comment = String(stringOrArray);
-  } else if (stringOrArray instanceof SSE.Retry) {
-    retry = stringOrArray.milliseconds
-  } else if (Array.isArray(stringOrArray)) {
-    message = String(stringOrArray.pop());
-    name = String(stringOrArray.pop() || '');
-    id = String(stringOrArray.pop() || '');
+  if (stringOrArrayOrObject instanceof SSE.Comment) {
+    comment = String(stringOrArrayOrObject);
+  } else if (stringOrArrayOrObject instanceof SSE.Retry) {
+    retry = stringOrArrayOrObject.milliseconds
+  } else if (Array.isArray(stringOrArrayOrObject)) {
+    message = stringOrArrayOrObject.pop();
+    name = String(stringOrArrayOrObject.pop() || '');
+    id = String(stringOrArrayOrObject.pop() || '');
   } else {
-    message = String(stringOrArray);
+    message = stringOrArrayOrObject;
+  }
+  if (message && typeof message === 'object') {
+    message = JSON.stringify(message)
+  } else if (message) {
+    message = String(message)
   }
 
   this.getMessage = function () {

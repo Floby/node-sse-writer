@@ -98,7 +98,14 @@ describe('a sse stream', function () {
       streamEqual(expected, actual, done);
     })
   })
-
+  describe('.event({ ...data})', function () {
+    it('has the same effect as calling .write(data)', function(done) {
+      expected.end({my: 'data'});
+      actual.event({my: 'data'});
+      actual.end()
+      streamEqual(expected, actual, done);
+    })
+  })
 
   describe('.write([data])', function () {
     it('has the same effect as calling .write(data)', function (done) {
