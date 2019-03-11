@@ -38,6 +38,17 @@ describe('a sse stream', function () {
         });
       });
     });
+    describe('when called with a JSON unsafe to stringify', function () {
+      it('writes a safe stringified version', function () {
+        var data = {a:1}
+        data.data = data
+        sse.write(data);
+        sse.end();
+        return sse.pipe(sink()).then(function(contents) {
+          expect(contents).to.equal('data: {"a":1,"data":"[Circular ~]"}\r\n\r\n');
+        });
+      });
+    })
   });
 });
 

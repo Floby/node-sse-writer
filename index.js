@@ -1,8 +1,9 @@
 var stream = require('stream');
-const ms = require('ms')
+var ms = require('ms')
 var util = require('util');
+var stringify = require('json-stringify-safe')
 
-const END_OF_LINE = '\u000d\u000a'
+var END_OF_LINE = '\u000d\u000a'
 
 module.exports = SSE;
 
@@ -72,7 +73,7 @@ function Chunk (stringOrArrayOrObject) {
     message = stringOrArrayOrObject;
   }
   if (message && typeof message === 'object') {
-    message = JSON.stringify(message)
+    message = stringify(message)
   } else if (message) {
     message = String(message)
   }
