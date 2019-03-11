@@ -28,13 +28,13 @@
   },
   "homepage": "https://github.com/Floby/node-sse-writer",
   "devDependencies": {
-    "chai": "^3.5.0",
+    "chai": "^4.2.0",
     "coveralls": "^2.11.4",
     "istanbul": "^0.4.5",
-    "mocha": "^2.3.0",
-    "sinon": "^1.17.5",
-    "sinon-chai": "^2.8.0",
-    "stream-sink": "^1.2.0"
+    "mocha": "^6.0.2",
+    "sinon": "^7.2.7",
+    "sinon-chai": "^3.3.0",
+    "stream-sink": "^2.2.2"
   },
   "dependencies": {
     "ms": "^2.1.1"
