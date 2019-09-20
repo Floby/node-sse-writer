@@ -1,6 +1,6 @@
 {
   "name": "sse-writer",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Creates a text/event-stream stream as specified by the WD-eventsource W3C recommendation",
   "main": "index.js",
   "scripts": {
