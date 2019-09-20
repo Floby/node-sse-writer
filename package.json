@@ -4,7 +4,7 @@
   "description": "Creates a text/event-stream stream as specified by the WD-eventsource W3C recommendation",
   "main": "index.js",
   "scripts": {
-    "test": "istanbul cover --print detail _mocha -- test -R spec",
+    "test": "nyc -r text -r html -r lcov mocha test -R spec",
     "prepublish": "echo /test | cat - .gitignore > .npmignore",
     "coveralls": "cat coverage/lcov.info | coveralls"
   },
@@ -31,8 +31,8 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "coveralls": "^3.0.6",
-    "istanbul": "^0.4.5",
     "mocha": "^6.2.0",
+    "nyc": "^14.1.1",
     "sinon": "^7.2.7",
     "sinon-chai": "^3.3.0",
     "stream-sink": "^2.2.2"
