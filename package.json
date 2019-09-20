@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "istanbul cover --print detail _mocha -- test -R spec",
+    "prepublish": "echo /test | cat - .gitignore > .npmignore",
     "coveralls": "cat coverage/lcov.info | coveralls"
   },
   "repository": {
