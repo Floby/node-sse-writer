@@ -1,2 +1,4 @@
+.*.un~
+.*.sw[a-z]
 node_modules
 coverage
